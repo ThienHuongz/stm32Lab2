@@ -1,0 +1,4 @@
+../Core/Src/linkedList.c:12:7:createNode	1
+../Core/Src/linkedList.c:25:6:insertAtBeginning	2
+../Core/Src/linkedList.c:34:6:insertAtEnd	3
+../Core/Src/linkedList.c:47:6:connectEndToFirst	2
