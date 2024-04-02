@@ -22,7 +22,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "software_timer.h"
-
+#include "linkedList.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -58,7 +58,7 @@ static void MX_TIM2_Init(void);
 void update7SEG (int index);
 void display7SEG(int k);
 void updateClockBuffer();
-
+void controlColumns (int value);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -179,6 +179,92 @@ void display7SEG(int k){
 		                          |LED_E_Pin|LED_F_Pin|LED_G_Pin, GPIO_PIN_RESET);
 	}
 }
+void controlColumns (int value){
+	switch (value){
+		case 0:
+			HAL_GPIO_WritePin(GPIOA, ENM0_Pin, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOA, ENM1_Pin|ENM2_Pin|ENM3_Pin|ENM4_Pin|ENM5_Pin
+			  	                          |ENM6_Pin|ENM7_Pin, GPIO_PIN_RESET);
+			break;
+		case 1:
+			HAL_GPIO_WritePin(GPIOA, ENM1_Pin, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOA, ENM0_Pin|ENM2_Pin|ENM3_Pin|ENM4_Pin|ENM5_Pin
+			  	                          |ENM6_Pin|ENM7_Pin, GPIO_PIN_RESET);
+			break;
+		case 2:
+			HAL_GPIO_WritePin(GPIOA, ENM2_Pin, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOA, ENM0_Pin|ENM1_Pin|ENM3_Pin|ENM4_Pin|ENM5_Pin
+			  	                          |ENM6_Pin|ENM7_Pin, GPIO_PIN_RESET);
+			break;
+		case 3:
+			HAL_GPIO_WritePin(GPIOA, ENM3_Pin, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOA, ENM0_Pin|ENM1_Pin|ENM2_Pin|ENM4_Pin|ENM5_Pin
+			  	                          |ENM6_Pin|ENM7_Pin, GPIO_PIN_RESET);
+			break;
+		case 4:
+			HAL_GPIO_WritePin(GPIOA, ENM4_Pin, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOA, ENM0_Pin|ENM1_Pin|ENM2_Pin|ENM3_Pin|ENM5_Pin
+			  	                          |ENM6_Pin|ENM7_Pin, GPIO_PIN_RESET);
+			break;
+		case 5:
+			HAL_GPIO_WritePin(GPIOA, ENM5_Pin, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOA, ENM0_Pin|ENM1_Pin|ENM2_Pin|ENM3_Pin|ENM4_Pin
+			  	                          |ENM6_Pin|ENM7_Pin, GPIO_PIN_RESET);
+			break;
+		case 6:
+			HAL_GPIO_WritePin(GPIOA, ENM6_Pin, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOA, ENM0_Pin|ENM1_Pin|ENM2_Pin|ENM3_Pin|ENM4_Pin|ENM5_Pin
+			  	                          |ENM7_Pin, GPIO_PIN_RESET);
+			break;
+		case 7:
+			HAL_GPIO_WritePin(GPIOA, ENM7_Pin, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOA, ENM0_Pin|ENM1_Pin|ENM2_Pin|ENM3_Pin|ENM4_Pin|ENM5_Pin
+			  	                          |ENM6_Pin, GPIO_PIN_RESET);
+			break;
+		default:
+			HAL_GPIO_WritePin(GPIOA, ENM0_Pin|ENM1_Pin|ENM2_Pin|ENM3_Pin|ENM4_Pin|ENM5_Pin
+			  	                          |ENM6_Pin |ENM7_Pin, GPIO_PIN_RESET);
+			break;
+	}
+}
+void controlRows (int value){
+	switch (value){
+		case 0:
+	  		  HAL_GPIO_WritePin(GPIOB, ROW0_Pin , SET);
+			break;
+		case 1:
+	  		  HAL_GPIO_WritePin(GPIOB, ROW1_Pin , SET);
+
+			break;
+		case 2:
+	  		  HAL_GPIO_WritePin(GPIOB, ROW2_Pin , SET);
+
+			break;
+		case 3:
+	  		  HAL_GPIO_WritePin(GPIOB, ROW3_Pin , SET);
+
+			break;
+		case 4:
+	  		  HAL_GPIO_WritePin(GPIOB, ROW4_Pin , SET);
+
+			break;
+		case 5:
+	  		  HAL_GPIO_WritePin(GPIOB, ROW5_Pin , SET);
+
+			break;
+		case 6:
+	  		  HAL_GPIO_WritePin(GPIOB, ROW6_Pin , SET);
+
+			break;
+		case 7:
+	  		  HAL_GPIO_WritePin(GPIOB, ROW7_Pin , SET);
+			break;
+		default:
+	  		  HAL_GPIO_WritePin(GPIOB, ROW0_Pin |ROW1_Pin | ROW2_Pin | ROW3_Pin | ROW4_Pin |
+	  				  ROW5_Pin| ROW6_Pin |ROW7_Pin , RESET);
+			break;
+	}
+}
 
 /* USER CODE END 0 */
 
@@ -199,6 +285,23 @@ int main(void)
 
   /* USER CODE BEGIN Init */
 
+  int i=7;
+  int character_A[8][8] = {{0,0,0,1,1,0,0,0},{0,0,1,1,1,1,0,0},{0,1,1,0,0,1,1,0},{0,1,1,0,0,1,1,0},
+    		  {0,1,1,1,1,1,1,0},{0,1,1,1,1,1,1,0},{0,1,1,0,0,1,1,0},{0,1,1,0,0,1,1,0}};
+//    int character_A[8][8] = {{0,1,1,0,0,1,1,0},{0,1,1,0,0,1,1,0},{0,1,1,1,1,1,1,0},{0,1,1,1,1,1,1,0},
+//    		{0,1,1,0,0,1,1,0},{0,1,1,0,0,1,1,0},{0,0,1,1,1,1,0,0},{0,0,0,1,1,0,0,0}};
+
+
+  Node* head[8] = { NULL };
+
+  for (int i = 0; i < 8; i++) {
+      for (int j = 0; j < 8; j++) {
+          insertAtEnd(&head[i], character_A[i][j]);
+      }
+      connectEndToFirst(&head[i]);
+  }
+
+  Node* temp = head[i];
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -221,8 +324,9 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   setTimer0(100);
-  setTimer1(100);
-  setTimer2(25);
+  setTimer1(1000);
+  setTimer2(500);
+  setTimer3(10);
 
   // ngat timer goi 10ms moi lan => 10x100 = 1000ms = 1s
   while (1)
@@ -235,16 +339,45 @@ int main(void)
 		  }
 		  // LED PA5 and DOT
     	  if (timer1_flag == 1){
+
     		  HAL_GPIO_TogglePin(GPIOA,LED_RED_Pin);
     		  HAL_GPIO_TogglePin(GPIOA,DOT_Pin);
-    		  setTimer1(100);
+    		  setTimer1(1000);
     	  }
     	  // update buffer to 7seg
     	  if (timer2_flag == 1){
     		  update7SEG(index_led++);
-    		  setTimer2(25);
+    		  setTimer2(500);
+    	  }
+    	  // led matrix
+    	  if (timer3_flag == 1){
+    		  	 // turn of all led row
+				controlRows(-1);
+				// turn on i column
+    	 		controlColumns(i);
+
+
+    	 		 for (int j = 0; j < 8; j++) {
+    	 	    	if (temp->data == 1){
+    	 	    			controlRows(j);
+    	 	    	}
+    	 	    	temp = temp->next;
+    	 		  }
+
+    	 		 // update led matrix
+    	 		 head[i] = head[i]->next;
+
+    	 	     i--;
+    	 	     if (i == -1) {
+    	 	    	 i = 7;
+    	 	     }
+    	 	     temp = head[i];
+
+    	  	setTimer3(10);
     	  }
 
+
+// 	    HAL_Delay(1);
       }
 }
 /**
