@@ -18,10 +18,9 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
+#include "software_timer.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "software_timer.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -43,6 +42,8 @@
 TIM_HandleTypeDef htim2;
 
 
+int hour = 15 , minute = 8 , second = 50;
+
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -59,6 +60,15 @@ void display7SEG(int k);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+void updateClockBuffer(){
+	led_buffer[0] = hour / 10;
+	led_buffer[1] =	hour %10;
+	led_buffer[2] = minute / 10;
+	led_buffer[3] = minute % 10;
+  	second ++;
+
+}
 void display7SEG(int k){
 	switch (k){
 
@@ -168,7 +178,19 @@ int main(void)
   while (1)
     {
       /* USER CODE END WHILE */
-
+	  	if ( second >= 60) {
+	  		second = 0;
+	  		minute++;
+	  	}
+	  	if (minute >= 60){
+	  		minute =0;
+	  		hour++;
+	  	}
+	  	if (hour >= 24){
+	  		hour=0;
+	  	}
+	  	updateClockBuffer();
+	  	HAL_Delay (1000) ;
       /* USER CODE BEGIN 3 */
     }
     /* USER CODE END 3 */
@@ -301,8 +323,6 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-int counter = 100;
-
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 	timerRun();
 

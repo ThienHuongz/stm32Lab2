@@ -8,7 +8,7 @@
 #include "main.h"
 
 int timer1_count = 100;
-int timer2_count = 100;
+int timer2_count = 25;
 int status = 1;
 
 const int MAX_LED = 4;
@@ -48,6 +48,7 @@ void update7SEG (int index){
 	}
 }
 
+
 void timerRun(){
 
 	if (timer1_count > 0){
@@ -61,7 +62,7 @@ void timerRun(){
 	if (timer2_count > 0){
 		timer2_count--;
 		if (timer2_count <= 0){
-			timer2_count= 100;
+			timer2_count= 25;
 			update7SEG(index_led++);
 		}
 	}
