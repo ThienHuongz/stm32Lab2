@@ -5,68 +5,60 @@
  *      Author: glmun
  */
 #include "software_timer.h"
-#include "main.h"
+int timer0_counter = 0;
+int timer1_count = 0;
+int timer2_count = 0;
+int timer3_count =0;
 
-int timer1_count = 100;
-int timer2_count = 25;
-int status = 1;
+int timer0_flag = 0;
+int timer1_flag = 0;
+int timer2_flag = 0;
+int timer3_flag = 0;
 
-const int MAX_LED = 4;
-int index_led = 0;
-int led_buffer [4] = {1 , 2 , 3 , 4};
+int TIMER_CYCLE = 10;
 
-void update7SEG (int index){
-	if (index >3) {
-		index_led = 0;
-		index = 0;
-	}
-
-	switch (index){
-		case 0:
-		  	HAL_GPIO_WritePin(GPIOA, EN0_Pin, GPIO_PIN_RESET);
-		  	HAL_GPIO_WritePin(GPIOA, EN2_Pin| EN3_Pin  | EN1_Pin, GPIO_PIN_SET);
-		  	display7SEG(led_buffer[0]);
-			break;
-		case 1:
-		  	HAL_GPIO_WritePin(GPIOA,  EN1_Pin, GPIO_PIN_RESET);
-		  	HAL_GPIO_WritePin(GPIOA, EN0_Pin | EN2_Pin | EN3_Pin, GPIO_PIN_SET);
-		  	display7SEG(led_buffer[1]);
-			break;
-		case 2:
-		  	HAL_GPIO_WritePin(GPIOA,EN2_Pin , GPIO_PIN_RESET);
-		  	HAL_GPIO_WritePin(GPIOA, EN0_Pin | EN1_Pin | EN3_Pin, GPIO_PIN_SET);
-		  	display7SEG(led_buffer[2]);
-			break;
-		case 3:
-		  	HAL_GPIO_WritePin(GPIOA, EN3_Pin, GPIO_PIN_RESET);
-		  	HAL_GPIO_WritePin(GPIOA, EN2_Pin | EN0_Pin | EN1_Pin, GPIO_PIN_SET);
-		  	display7SEG(led_buffer[3]);
-			break;
-		default:
-			display7SEG(0);
-			break;
-	}
+void setTimer0 (int duration){
+	timer0_counter = duration;
+	timer0_flag = 0;
 }
 
-
+void setTimer1 (int duration){
+	timer1_count = duration;
+	timer1_flag = 0;
+}
+void setTimer2 (int duration){
+	timer2_count = duration;
+	timer2_flag = 0;
+}
+void setTimer3 (int duration){
+	timer3_count = duration;
+	timer3_flag = 0;
+}
 void timerRun(){
-
+	if (timer0_counter > 0){
+		timer0_counter--;
+		if (timer0_counter <= 0){
+			timer0_flag = 1;
+		}
+	}
 	if (timer1_count > 0){
 		timer1_count--;
 		if (timer1_count <= 0 ){
-	  		  HAL_GPIO_TogglePin(GPIOA,LED_RED_Pin);
-	  		  HAL_GPIO_TogglePin(GPIOA,DOT_Pin);
-	  		  timer1_count = 100;
+			timer1_flag = 1;
 		}
 	}
 	if (timer2_count > 0){
 		timer2_count--;
 		if (timer2_count <= 0){
-			timer2_count= 25;
-			update7SEG(index_led++);
+			timer2_flag = 1;
 		}
 	}
-
+	if (timer3_count > 0){
+		timer3_count--;
+		if (timer3_count <= 0){
+			timer3_flag = 1;
+		}
+	}
 }
 
 
