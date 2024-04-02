@@ -42,6 +42,7 @@
 /* Private variables ---------------------------------------------------------*/
 TIM_HandleTypeDef htim2;
 
+
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -50,6 +51,8 @@ TIM_HandleTypeDef htim2;
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_TIM2_Init(void);
+void update7SEG (int index);
+void display7SEG(int k);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -120,6 +123,8 @@ void display7SEG(int k){
 		                          |LED_E_Pin|LED_F_Pin|LED_G_Pin, GPIO_PIN_RESET);
 	}
 }
+
+
 /* USER CODE END 0 */
 
 /**
@@ -138,6 +143,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
+
 
   /* USER CODE END Init */
 
@@ -161,12 +167,12 @@ int main(void)
   // ngat timer goi 10ms moi lan => 10x100 = 1000ms = 1s
   while (1)
     {
-    /* USER CODE END WHILE */
+      /* USER CODE END WHILE */
 
-    /* USER CODE BEGIN 3 */
+      /* USER CODE BEGIN 3 */
     }
-  /* USER CODE END 3 */
-}
+    /* USER CODE END 3 */
+  }
 
 /**
   * @brief System Clock Configuration
