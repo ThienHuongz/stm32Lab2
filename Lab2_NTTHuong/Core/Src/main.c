@@ -323,10 +323,10 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  setTimer0(100);
-  setTimer1(1000);
-  setTimer2(500);
-  setTimer3(10);
+  setTimer0(10);
+  setTimer1(100);
+  setTimer2(50);
+  setTimer3(1);
 
   // ngat timer goi 10ms moi lan => 10x100 = 1000ms = 1s
   while (1)
@@ -335,19 +335,19 @@ int main(void)
 	  	  // update hour minute and second
 		  if (timer0_flag == 1 ){
 				updateClockBuffer();
-				setTimer0(100);
+				setTimer0(10);
 		  }
 		  // LED PA5 and DOT
     	  if (timer1_flag == 1){
 
     		  HAL_GPIO_TogglePin(GPIOA,LED_RED_Pin);
     		  HAL_GPIO_TogglePin(GPIOA,DOT_Pin);
-    		  setTimer1(1000);
+    		  setTimer1(100);
     	  }
     	  // update buffer to 7seg
     	  if (timer2_flag == 1){
     		  update7SEG(index_led++);
-    		  setTimer2(500);
+    		  setTimer2(50);
     	  }
     	  // led matrix
     	  if (timer3_flag == 1){
@@ -373,7 +373,7 @@ int main(void)
     	 	     }
     	 	     temp = head[i];
 
-    	  	setTimer3(10);
+    	  	setTimer3(1);
     	  }
 
 
